@@ -1,0 +1,41 @@
+---
+title: "HW4_Alex_Parra_Garcia_Code"
+author: "Alex Parra"
+date: "22/2/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+
+
+```{r}
+set.seed(1)
+
+problem1 = function(n, rate, N=1000){
+  
+  xbars = numeric(N)
+  for(i in 1:N){
+    dataSet = rexp(n = n, rate = rate)
+    xbars[i] = mean(dataSet)
+  }
+  qqnorm(xbars)
+}
+```
+
+```{r}
+problem1( 1, 1/4)
+problem1( 5, 1/4)
+problem1( 30, 1/4)
+problem1( 100, 1/4)
+  
+```
+
+
+We can see that as the n increases the more linear the graph becomes. Where n was 1 we can see that the graph is clearly non linear. And if we check the other extreme where n was 100 we can see that the graph is almost linear.This is because as the number of points generated increase the more stable the average is going to become, in return becoming closer to a normal population.
+
