@@ -1,0 +1,158 @@
+---
+title: "Functions in R"
+author: "Peter Nandori"
+date: "2/8/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Writing your own function
+
+Many functions are already available in R as default and some are available by installing special packages.
+Still, you may want to write your own function for efficient execution of tasks. To this end, you need the
+R function *function*. The following function takes $x,a,b$ as an input and compute $\log(a*x+b)$ as an output.
+
+```{r}
+##################################################################################
+## toyFunc1
+##   multiplying by a, adding 1 and then taking logarithm 
+##  Input:
+##   x: vector
+##   a: some number 
+##   b: some number
+##  Output:
+##   y: log(a x + b)
+##################################################################################
+toyFunc1 = function(x,a,b){
+    y = log(a*x+b)
+    return(y)
+}
+```
+
+Here, 
+**x, a, b** 
+within the parentheses are inputs to the function named 
+**toyFunc1**. 
+After the parentheses, R
+statements you want to execute are included in the curly brackets. 
+For an output, the function return is used. If
+you do not have a quantity to return, you can simply end statements without return.
+Now we can invoke our function 
+**toyfunction** for a list of $x$'s
+with $a = 2$, $b = 100$. Note the
+two different syntax
+```{r}
+x = 1:5
+toyFunc1(x=x,a=2,b=100)
+toyFunc1(x,2,100)
+```
+
+If you use $b=100$ almost always, it is desirable to set an default value:
+```{r}
+toyFunc2 = function(x,a,b = 100){
+    y = log(a*x+b)
+    return(y)
+}
+```
+
+Since the default value is set,
+we can now type
+```{r}
+toyFunc2(1:5,2)
+```
+
+Do you remember the previous homework
+problem, where you needed to run the 
+same code with the only difference
+that a parameter $n$ was updated?
+
+This should be easily done with a function.
+
+
+```{r}
+################################################################################
+## simExp
+##    Plots the histogram over N experiments.
+##    Each experiment consists of 
+##    standardizing the sample mean 
+##    of a sample of size n from an exponential population.
+##  Input:
+##    N: number of experiments
+##    n: sample size
+##    rate: parameter of exponential distribution
+##    
+##  Output:
+##    Histogram and plot of bell curve
+#################################################################################
+simExp = function(N, n, rate=2){
+    xbars = numeric(N) 
+    for(i in 1:N){
+        dataSet =
+          rexp(n=n,rate=rate) 
+        xbars[i] = mean(dataSet) 
+    }
+    zs = (xbars-1/rate)*(rate*sqrt(n)) 
+    hist(zs,prob=TRUE,
+         ylim=c(0,.6),
+         xlim=c(-4,4),
+         main="Exponential Distribution",
+         xlab=paste("n=",n)) 
+    curve(dnorm(x,mean=0,sd=1), add=TRUE)
+}
+
+```
+
+Now we can easily produce four 
+plots, each with the function
+**simExp** but with different $n$
+```{r}
+par(mfrow=c(2,2))
+simExp(N=1000,n=5)
+simExp(N=1000,n=10)
+simExp(N=1000,n=20)
+simExp(N=1000,n=40)
+```
+
+
+## Exercise 
+
+Write a function **VarianceCI**
+that does the following.
+
+(1)
+takes the number of simulations **N**, the sample size **n**, the parameters **mean** and **sdev**, level of confidence **alpha**
+as inputs, 
+
+(2) generates random samples of size 
+**n** from the normal distribution with parameters **mean** and **sdev**, 
+
+(3) compute
+$(100-alpha)\%$ CI 
+for the variance **sdev**^2
+(you may want to use **qchisq**,
+the quantile function of the 
+chi-squared distribution),
+
+(4) repeat (2)-(3) **N** times, 
+
+(5) compute the successful coverage proportion, that is the 
+number of times the CI actually
+contains **sdev**^2, divided by **N**
+
+(6) draw a plot for coverage using matplot as we did in the file
+TDistrCofidenceIntervals.R last week.
+
+Finally, run
+this function with **mean** = 0 and **sdev** = 1
+and with both
+**N** =10, **N** =100,
+for both **n** = 5, **n** = 100
+(that is, 4 cases in total).
+Discuss your
+finding.
+
+Submit your code as well as the resulting plots and discussions in an
+R Markdown file.
